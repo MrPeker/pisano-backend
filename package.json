@@ -3,6 +3,7 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "moment": "^2.22.2",
+    "mongo-sanitize": "^1.0.0",
     "mongoose": "^5.3.3",
     "node-jwt": "^0.0.1"
   },
