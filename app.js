@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const port = process.env.PORT || 8080;
 
 const db = require('./configs/db.js');
 const sanitize = require('mongo-sanitize');
@@ -83,6 +84,6 @@ app.get('/product/detail/:id', (req, res) => {
     }
 })
 
-app.listen(8080, () => {
-    console.log('App running on 8080');
+app.listen(port, () => {
+    console.log('App running on ' + port);
 })
