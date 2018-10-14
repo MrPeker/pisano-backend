@@ -91,9 +91,17 @@ app.get('/wikipedia/search/:query', (req, res) => {
     if(req.params.query) {
         console.log(req.params.query);
         let wikipediaSearchURL = 'https://tr.wikipedia.org/w/api.php?action=opensearch&format=json&formatversion=2&search=' + req.params.query + '&namespace=0&limit=10&suggest=true';
-        fetch(wikipediaSearchURL)
+        fetch(wikipediaSearchURL, {
+            Cookie: 'WMF-Last-Access-Global=14-Oct-2018; GeoIP=US:GA:Atlanta:33.75:-84.39:v4; WMF-Last-Access=14-Oct-2018',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36',
+            UserAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36'
+        })
             .then((response) => {
-                res.json(response)
+                return response.json()
+            })
+            .then(text => {
+                console.log(text);
+                res.json(text);
             })
             .catch((err) => {
                 console.error(err);
@@ -108,6 +116,9 @@ app.get('/wikipedia/page', (req, res) => {
     if(req.query.url) {
         if(req.query.url.match(/https\:\/\/tr\.wikipedia\.org\//)) {
             fetch(req.query.url)
+                .then(response => {
+                    return response.text()
+                })
                 .then((response) => {
                     let $ = cheerio.load(response);
                     let content = $('#content').html();
