@@ -6,9 +6,14 @@ const sanitize = require('mongo-sanitize');
 
 const Product = require('./models/Product');
 
+app.get('/', (req, res) => {
+    res.json({
+        status: true,
+        message: 'SGlEZXZlbG9wZXIh'
+    })
+});
 
 app.get('/product/search/:query', (req, res) => {
-    console.log(req.params.query);
     if(req.params.query) {
         Product.find({
             $or: [
@@ -51,13 +56,32 @@ app.get('/product/search/:query', (req, res) => {
                     };
                 });
 
-                res.json({ status: true, message: 'successfully', objects: objs });
+                res.json({ status: true, message: 'successfully', products: objs });
             } else {
                 res.json({ status: false, message: 'noResult'})
             }
         })
     }
 });
+
+app.get('/product/detail/:id', (req, res) => {
+    if(req.params.id) {
+        Product.findById(req.params.id, (err, doc) => {
+            if(err) {
+                console.error(err);
+                res.json({ status: false, message: 'technicalError' });
+            }
+
+            if(doc) {
+                res.json({ status: true, message: 'successfully', product: doc });
+            } else {
+                res.json({ status: false, message: 'notFound' });
+            }
+        })
+    } else {
+        res.json({ status: false, message: 'notEnoughInfo' });
+    }
+})
 
 app.listen(8080, () => {
     console.log('App running on 8080');
