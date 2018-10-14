@@ -7,6 +7,9 @@ const sanitize = require('mongo-sanitize');
 
 const Product = require('./models/Product');
 
+const fetch = require('node-fetch');
+const cheerio = require('cheerio');
+
 app.get('/', (req, res) => {
     res.json({
         status: true,
@@ -79,6 +82,42 @@ app.get('/product/detail/:id', (req, res) => {
                 res.json({ status: false, message: 'notFound' });
             }
         })
+    } else {
+        res.json({ status: false, message: 'notEnoughInfo' });
+    }
+});
+
+app.get('/wikipedia/search/:query', (req, res) => {
+    if(req.params.query) {
+        console.log(req.params.query);
+        let wikipediaSearchURL = 'https://tr.wikipedia.org/w/api.php?action=opensearch&format=json&formatversion=2&search=' + req.params.query + '&namespace=0&limit=10&suggest=true';
+        fetch(wikipediaSearchURL)
+            .then((response) => {
+                res.json(response)
+            })
+            .catch((err) => {
+                console.error(err);
+                res.json({ status: false, message: 'technicalError' });
+            })
+    } else {
+        res.json({ status: false, message: 'notEnoughInfo' });
+    }
+});
+
+app.get('/wikipedia/page', (req, res) => {
+    if(req.query.url) {
+        if(req.query.url.match(/https\:\/\/tr\.wikipedia\.org\//)) {
+            fetch(req.query.url)
+                .then((response) => {
+                    let $ = cheerio.load(response);
+                    let content = $('#content').html();
+                    res.json({ status: true, message: 'succesfully', data: content});
+                })
+                .catch(err => {
+                    console.error(err);
+                    res.json({ status: false, message: 'technicalError'});
+                })
+        }
     } else {
         res.json({ status: false, message: 'notEnoughInfo' });
     }
