@@ -10,6 +10,8 @@ const Product = require('./models/Product');
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
