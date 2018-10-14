@@ -10,6 +10,8 @@ const Product = require('./models/Product');
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
 
+const path = require('path');
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next) {
