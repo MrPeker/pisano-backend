@@ -33,9 +33,9 @@ app.get('/product/search/:query', (req, res) => {
                 { sellers: { $elemMatch: { title: { $regex: sanitize(req.params.query), $options: 'gi' } } } },
                 { sellers: { $elemMatch: { title: { $regex: sanitize(req.params.query.toLowerCase()), $options: 'gi' } } } },
                 { sellers: { $elemMatch: { title: { $regex: sanitize(req.params.query.toLocaleLowerCase('tr-TR')), $options: 'gi' } } } },
-                { features: { $regex: sanitize(req.params.query), $options: 'gi' } },
-                { features: { $regex: sanitize(req.params.query.toLowerCase()), $options: 'gi' } },
-                { features: { $regex: sanitize(req.params.query.toLocaleLowerCase('tr-TR')), $options: 'gi' } },
+                { featuresText: { $regex: sanitize(req.params.query), $options: 'gi' } },
+                { featuresText: { $regex: sanitize(req.params.query.toLowerCase()), $options: 'gi' } },
+                { featuresText: { $regex: sanitize(req.params.query.toLocaleLowerCase('tr-TR')), $options: 'gi' } },
             ]
         },  [
                 '_id',
